@@ -1,0 +1,32 @@
+$width_menu: 250px;
+$recuo_menu: 0px;
+
+#menu_lateral_custom {
+	z-index: 1;
+	width: calc($recuo_menu + $width_menu);
+	height: 80vh;
+	top: calc(50% - 40vh);
+	max-height: 90vh;
+	left: calc($recuo_menu - $width_menu);
+	transition: .3s;
+
+	&:hover {
+		left: 0;
+	}
+
+	.menu_lateral_custom {
+		width: $width_menu;
+		height: 100%;
+		overflow-y: auto;
+
+
+		.btn_menu {
+
+			&.active {
+				background-color: #0d6efd;
+				color: #ffffff;
+			}
+
+		}
+	}
+}

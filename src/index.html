@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teste de Template</title>
+  </head>
+  <body>
+
+    <!-- <object data="/component/global/menu.html" type="text/html" style="height: 100vh"></object> -->
+
+
+    <div class="container mt-5" x-data="table">
+
+      <div class="input-group mb-3" style="width: 300px">
+        <span class="input-group-text border-end-0 bg-transparent" id="basic-addon1"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control border-start-0 " x-model="search" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="border rounded-4">
+        <table class="table table-borderless mb-0 border-none">
+          <thead>
+            <tr class="border-2 border-bottom text-secondary">
+              <th>#</th>
+              <th>Exame</th>
+              <th>Piscicultura</th>
+              <th>Data de análise</th>
+              <th class="text-center" style="width: 375px;">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="report in reports" :key="report.id">
+              <tr class="border-1 border-top text-dark text-opacity-75">
+                <td>
+                  <template x-if="report.status">
+                    <span>
+                      <i class="bi bi-person-check text-primary"></i>
+                    </span>
+                  </template>
+                  <template x-if="!report.status">
+                    <span>
+                      <i class="bi bi-person-x text-danger"></i>
+                    </span>
+                  </template>
+                </td>
+                <td x-text="report.type"></td>
+                <td x-text="report.pisciculture"></td>
+                <td><i class="bi bi-calendar"></i> <span x-text="report.date_analitc"></span></td>
+                <td class="d-flex justify-content-center">
+
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                    <div class="btn border border-0 text-dark text-opacity-75">
+                      <i class="bi bi-pen"></i>
+                      Editar
+                    </div>
+                    <div class="btn border border-0 mx-3 text-dark text-opacity-75">
+                      <i class="bi bi-file-earmark-text"></i>
+                      Ver
+                    </div>
+                    <div class="btn border border-0 form-switch">
+                      <input class="form-check-input me-1" x-model="report.status" x-init="$watch('report.status', value => console.log(report))" style="margin-left: 0;" type="checkbox" role="switch">
+                      <label class="form-check-label text-start text-dark text-opacity-75" style="width: 40px;">
+                        <template x-if="report.status">
+                          <span>
+                            Ativo
+                          </span>
+                        </template>
+                        <template x-if="!report.status">
+                          <span>
+                            Inátivo
+                          </span>
+                        </template>
+                      </label>
+                    </div>
+                    <div @click="report.send_email++" class="btn border border-0 text-dark text-opacity-75 position-relative">
+                      <i class="bi bi-send"></i>
+                      Enviar
+                      <span x-text="report.send_email" class="position-absolute top-0 start-75 badge rounded-pill bg-primary">
+                        0
+                      </span>
+                    </div>
+                    <div class="btn border border-0 text-dark text-opacity-75" style="margin-left: 10px;" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                      <span class="mx-3">Historico de Alterações</span>
+                      <hr>
+                      <!-- <ol class="pb-0 mb-0">
+                        <li></li>
+                      </ol> -->
+                      <span class="text-center mx-auto d-block mb-1">Sem Histórico</span>
+                    </div>
+                  </div>
+
+                </td>
+              </tr>
+            </template>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <script type="module" src="./js/main.js"></script>
+    <script>
+      document.addEventListener('alpine:init', () => {
+          Alpine.data( 'table', () => ({
+            search : '',
+            data_reports : [
+              {
+                id: '1',
+                type: 'Microbiologico',
+                pisciculture: 'Peixe Saldavel',
+                date_analitc: '10/11/22',
+                status: true,
+                send_email: 0
+              },
+              {
+                id: '2',
+                type: 'Viral',
+                pisciculture: 'Ragfe',
+                date_analitc: '02/11/22',
+                status: true,
+                send_email: 0
+              },
+              {
+                id: '3',
+                type: 'Agua',
+                pisciculture: 'Escama Forte',
+                date_analitc: '25/11/22',
+                status: false,
+                send_email: 0,
+              },
+              {
+                id: '4',
+                type: 'Histopatologico',
+                pisciculture: 'Ragfe',
+                date_analitc: '15/11/22',
+                status: true,
+                send_email: 0,
+              },
+            ],
+            get reports() {
+              return this.data_reports.filter(
+                i => i.type.toUpperCase().startsWith(this.search.toUpperCase()) 
+              )
+            }
+          }))
+      })
+  </script>
+  </body>
+</html>
